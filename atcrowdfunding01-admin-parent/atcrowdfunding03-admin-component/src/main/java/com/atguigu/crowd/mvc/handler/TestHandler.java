@@ -24,30 +24,48 @@ import com.atguigu.crowd.util.ResultEntity;
 @Controller
 public class TestHandler {
 	
+	
 	@Autowired
 	private AdminService adminService;
 	
-	private Logger logger = LoggerFactory.getLogger(TestHandler.class);
+	@ResponseBody
+	@RequestMapping("/test/ajax/async.html")
+	public String testAsync() throws InterruptedException {
+		
+		Thread.sleep(5000);
+		
+		return "success";
+	}
+	
 	
 	@ResponseBody
-	@RequestMapping("/send/compose/object.json")
-	public ResultEntity<Student> testReceiveComposeObject(@RequestBody Student student, HttpServletRequest request) {
+	@RequestMapping("/send/array/one.html")
+	public String testReceiveArrayOne(@RequestParam("array[]") List<Integer> array) {
 		
-		boolean judgeResult = CrowdUtil.judgeRequestType(request);
+		for (Integer number : array) {
+			System.out.println("number="+number);
+		}
 		
-		logger.info("judgeResult="+judgeResult);
-		
-		logger.info(student.toString());
-		
-		// å°†â€œæŸ¥è¯¢â€åˆ°çš„Studentå¯¹è±¡å°è£…åˆ°ResultEntityä¸­è¿”å›
-		ResultEntity<Student> resultEntity = ResultEntity.successWithData(student);
-		
-		String a = null;
-		
-		System.out.println(a.length());
-		
-		return resultEntity;
+		return "success";
 	}
+
+	@ResponseBody
+	@RequestMapping("/send/array/two.html")
+	public String testReceiveArrayTwo(ParamData paramData) {
+		
+		List<Integer> array = paramData.getArray();
+		
+		for (Integer number : array) {
+			System.out.println("number="+number);
+		}
+		
+		return "success";
+	}
+
+	
+
+	private Logger logger = LoggerFactory.getLogger(TestHandler.class);
+
 	
 	@ResponseBody
 	@RequestMapping("/send/array/three.html")
@@ -61,43 +79,42 @@ public class TestHandler {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/send/array/two.html")
-	public String testReceiveArrayTwo(ParamData paramData) {
-		
-		List<Integer> array = paramData.getArray();
-		
-		for (Integer number : array) {
-			System.out.println("number="+number);
-		}
-		
-		return "success";
+	@RequestMapping("/send/compose/object.json")
+	public ResultEntity<Student> testReceiveComposeObject(@RequestBody Student student, HttpServletRequest request) {
+
+		boolean judgeResult = CrowdUtil.judgeRequestType(request);
+
+		logger.info("judgeResult=" + judgeResult);//true¡A¦]¬°return¤@­Ójson
+
+		logger.info(student.toString());
+
+		// ±N¡§¬d¸ß¡¨¨ìªºStudent¹ï¶H«Ê¸Ë¨ìResultEntity¤¤ªğ¦^
+		ResultEntity<Student> resultEntity = ResultEntity.successWithData(student);
+
+		String a = null;//´ú¸ÕnullpointException²§±`
+
+		System.out.println(a.length());//·í°õ¦æ¨ì³o¤@¦æªº®É­Ô¡A·|²£¥ÍnullpointException ¡A¸õÂà¨ì
+
+		return resultEntity;
 	}
+
 	
-	@ResponseBody
-	@RequestMapping("/send/array/one.html")
-	public String testReceiveArrayOne(@RequestParam("array[]") List<Integer> array) {
-		
-		for (Integer number : array) {
-			System.out.println("number="+number);
-		}
-		
-		return "success";
-	}
-	
+
+
 	@RequestMapping("/test/ssm.html")
 	public String testSsm(ModelMap modelMap, HttpServletRequest request) {
 		
 		boolean judgeResult = CrowdUtil.judgeRequestType(request);
 		
-		logger.info("judgeResult="+judgeResult);
+		logger.info("judgeResult="+judgeResult);//false¡A¦]¬°return¤@­Ó­¶­±¸ô®|
 		
 		List<Admin> adminList = adminService.getAll();
 		
 		modelMap.addAttribute("adminList", adminList);
 		
-		String a = null;
+		String a = null;//´ú¸ÕnullpointException²§±`
 		
-		System.out.println(a.length());
+		System.out.println(a.length());//·í°õ¦æ¨ì³o¤@¦æªº®É­Ô¡A·|²£¥ÍnullpointException ¡A¸õÂà¨ìsystem-error.jsp­¶­±
 		
 		return "target";
 	}

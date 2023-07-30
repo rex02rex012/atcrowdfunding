@@ -1,0 +1,9 @@
+eclipse.m2.WorkspacelifecycleMappingsLocation=D\:/me/workspace/eclipse_workspace/atcrowdfunding/.metadata/.plugins/org.eclipse.m2e.core/lifecycle-mapping-metadata.xml
+eclipse.m2.defaultRuntime=apache-maven-3.9.1
+eclipse.m2.runtimes=apache-maven-3.2.2|apache-maven-3.9.1
+eclipse.m2.runtimesNodes/apache-maven-3.2.2/location=D\:\\maven\\apache-maven-3.2.2
+eclipse.m2.runtimesNodes/apache-maven-3.2.2/type=EXTERNAL
+eclipse.m2.runtimesNodes/apache-maven-3.9.1/location=D\:\\maven\\apache-maven-3.9.1
+eclipse.m2.runtimesNodes/apache-maven-3.9.1/type=EXTERNAL
+eclipse.m2.userSettingsFile=D\:\\maven\\apache-maven-3.9.1\\conf\\settings.xml
+eclipse.preferences.version=1

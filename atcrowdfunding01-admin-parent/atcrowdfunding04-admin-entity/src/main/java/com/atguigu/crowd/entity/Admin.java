@@ -12,28 +12,8 @@ public class Admin {
     private String email;
 
     private String createTime;
-    
-    public Admin() {
-		
-	}
 
-    public Admin(Integer id, String loginAcct, String userPswd, String userName, String email, String createTime) {
-		super();
-		this.id = id;
-		this.loginAcct = loginAcct;
-		this.userPswd = userPswd;
-		this.userName = userName;
-		this.email = email;
-		this.createTime = createTime;
-	}
-
-	@Override
-	public String toString() {
-		return "Admin [id=" + id + ", loginAcct=" + loginAcct + ", userPswd=" + userPswd + ", userName=" + userName
-				+ ", email=" + email + ", createTime=" + createTime + "]";
-	}
-
-	public Integer getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -80,4 +60,33 @@ public class Admin {
     public void setCreateTime(String createTime) {
         this.createTime = createTime == null ? null : createTime.trim();
     }
+
+	public Admin(Integer id, String loginAcct, String userPswd, String userName, String email, String createTime) {
+		super();
+		this.id = id;
+		this.loginAcct = loginAcct;
+		this.userPswd = userPswd;
+		this.userName = userName;
+		this.email = email;
+		this.createTime = createTime;
+	}
+
+	public Admin() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "Admin [id=" + id + ", loginAcct=" + loginAcct + ", userPswd=" + userPswd + ", userName=" + userName
+				+ ", email=" + email + ", createTime=" + createTime + "]";
+	}
+    
+    
+    
+    
+    
+    
+    
+    
 }

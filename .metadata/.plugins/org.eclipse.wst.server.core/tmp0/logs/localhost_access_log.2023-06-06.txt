@@ -1,0 +1,8 @@
+0:0:0:0:0:0:0:1 - - [06/Jun/2023:20:16:32 +0800] "GET /atcrowdfunding02-admin-webui/role/to/page.html HTTP/1.1" 200 1950
+0:0:0:0:0:0:0:1 - - [06/Jun/2023:20:16:32 +0800] "GET /atcrowdfunding02-admin-webui/jquery/jquery-2.1.1.min.js HTTP/1.1" 200 84245
+0:0:0:0:0:0:0:1 - - [06/Jun/2023:20:16:32 +0800] "GET /atcrowdfunding02-admin-webui/css/login.css HTTP/1.1" 200 861
+0:0:0:0:0:0:0:1 - - [06/Jun/2023:20:16:32 +0800] "GET /atcrowdfunding02-admin-webui/css/font-awesome.min.css HTTP/1.1" 200 21963
+0:0:0:0:0:0:0:1 - - [06/Jun/2023:20:16:32 +0800] "GET /atcrowdfunding02-admin-webui/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 37045
+0:0:0:0:0:0:0:1 - - [06/Jun/2023:20:16:32 +0800] "GET /atcrowdfunding02-admin-webui/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 121200
+0:0:0:0:0:0:0:1 - - [06/Jun/2023:20:16:33 +0800] "GET /atcrowdfunding02-admin-webui/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 18028
+0:0:0:0:0:0:0:1 - - [06/Jun/2023:20:16:33 +0800] "GET /favicon.ico HTTP/1.1" 404 1016

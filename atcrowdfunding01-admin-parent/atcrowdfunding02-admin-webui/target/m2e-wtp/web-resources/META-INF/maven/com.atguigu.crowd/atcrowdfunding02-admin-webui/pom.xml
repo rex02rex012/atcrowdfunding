@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.atguigu.crowd</groupId>
@@ -10,13 +10,16 @@
 	<artifactId>atcrowdfunding02-admin-webui</artifactId>
 	<packaging>war</packaging>
 	<dependencies>
+
+
 		<dependency>
 			<groupId>com.atguigu.crowd</groupId>
 			<artifactId>atcrowdfunding03-admin-component</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
-		<!-- junit测试 -->
+
+		<!-- junit測試 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
@@ -34,18 +37,42 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- 引入Servlet容器中相关依赖 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+
+		<!-- AOP 所需依賴 -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+		</dependency>
+		<!-- AOP 所需依賴 -->
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<!-- 引入Servlet 容器中相關依賴 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
-		<!-- JSP页面使用的依赖 -->
+		<!-- JSP 頁面使用的依賴 -->
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<defaultGoal>compile</defaultGoal>
+	</build>
 </project>

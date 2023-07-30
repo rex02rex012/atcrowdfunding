@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.junit.Test"/>
+<fullyQualifiedTypeName name="com.sun.org.slf4j.internal.LoggerFactory"/>
+<fullyQualifiedTypeName name="com.atguigu.crowd.entity.AdminExample"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ResponseBody"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestParam"/>
+<fullyQualifiedTypeName name="com.github.pagehelper.PageInfo"/>
+<fullyQualifiedTypeName name="org.springframework.dao.DuplicateKeyException"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
+<fullyQualifiedTypeName name="org.slf4j.Logger"/>
+<fullyQualifiedTypeName name="org.slf4j.LoggerFactory"/>
+<fullyQualifiedTypeName name="com.atguigu.crowd.exception.LoginAcctAlreadyInUseForUpdateException"/>
+<fullyQualifiedTypeName name="com.atguigu.crowd.service.api.RoleService"/>
+<fullyQualifiedTypeName name="com.atguigu.crowd.entity.Role"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+</qualifiedTypeNameHistroy>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move &apos;AuthMapper.xml&apos; to &apos;mapper&apos;" description="Move &apos;AuthMapper.xml&apos; to &apos;mapper&apos;" destination="src/main/resources/mybatis/mapper" element1="/atcrowdfunding06-common-reverse/src/main/java/com/atguigu/crowd/mapper/AuthMapper.xml" flags="7" id="org.eclipse.ltk.core.refactoring.move.resources" resources="1" stamp="1687506468286" updateReferences="true"/>
+</session>

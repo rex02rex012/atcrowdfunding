@@ -1,28 +1,66 @@
 package com.atguigu.crowd.util;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import javax.servlet.http.HttpServletRequest;
 
+import com.atguigu.crowd.constant.CrowdConstant;
+
 public class CrowdUtil {
-	
+
 	/**
-	 * åˆ¤æ–­å½“å‰è¯·æ±‚æ˜¯å¦ä¸ºAjaxè¯·æ±‚
-	 * @param request è¯·æ±‚å¯¹è±¡
-	 * @return
-	 * 		trueï¼šå½“å‰è¯·æ±‚æ˜¯Ajaxè¯·æ±‚
-	 * 		falseï¼šå½“å‰è¯·æ±‚ä¸æ˜¯Ajaxè¯·æ±‚
+	 * §PÂ_·í«e½Ğ¨D¬O§_¬°Ajax½Ğ¨D
+	 * 
+	 * @param request ½Ğ¨D¹ï¶H
+	 * @return true¡G·í«e½Ğ¨D¬OAjax½Ğ¨D false¡G·í«e½Ğ¨D¤£¬OAjax½Ğ¨D
 	 */
 	public static boolean judgeRequestType(HttpServletRequest request) {
-		
-		// 1.è·å–è¯·æ±‚æ¶ˆæ¯å¤´
+
+		// 1.Àò¨ú½Ğ¨D®ø®§ÀY¡A¹ïÀ³####13.3.1 §PÂ_¨Ì¾Ú ¹Ï¤¤ªºKey
 		String acceptHeader = request.getHeader("Accept");
 		String xRequestHeader = request.getHeader("X-Requested-With");
-		
-		// 2.åˆ¤æ–­
+
+		// 2.§PÂ_
 		return (acceptHeader != null && acceptHeader.contains("application/json"))
-				
+
 				||
-				
+
 				(xRequestHeader != null && xRequestHeader.equals("XMLHttpRequest"));
+	}
+
+	/**
+	 * ¹ï©ú¤å¦r²Å¦ê¶i¦æMD5 ¥[±K
+	 * 
+	 * @param source ¶Ç¤Jªº©ú¤å¦r²Å¦ê
+	 * @return ¥[±Kµ²ªG
+	 */
+	public static String md5(String source) {
+		// 1.§PÂ_source ¬O§_¦³®Ä
+		if (source == null || source.length() == 0) {
+			// 2.¦pªG¤£¬O¦³®Äªº¦r²Å¦ê©ß¥X²§±`
+			throw new RuntimeException(CrowdConstant.MESSAGE_STRING_INVALIDATE);
+		}
+		try {
+			// 3.Àò¨úMessageDigest ¹ï¶H
+			String algorithm = "md5";
+			MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
+			// 4.Àò¨ú©ú¤å¦r²Å¦ê¹ïÀ³ªº¦r¸`¼Æ²Õ
+			byte[] input = source.getBytes();
+			// 5.°õ¦æ¥[±K
+			byte[] output = messageDigest.digest(input);
+			// 6.³Ğ«ØBigInteger ¹ï¶H
+			int signum = 1;
+			BigInteger bigInteger = new BigInteger(signum, output);
+			// 7.«ö·Ó16 ¶i¨î±NbigInteger ªº­ÈÂà´«¬°¦r²Å¦ê
+			int radix = 16;
+			String encoded = bigInteger.toString(radix).toUpperCase();
+			return encoded;
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

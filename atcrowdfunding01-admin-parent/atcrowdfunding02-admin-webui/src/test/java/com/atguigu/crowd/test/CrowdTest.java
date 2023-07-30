@@ -14,36 +14,60 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.atguigu.crowd.entity.Admin;
+import com.atguigu.crowd.entity.Role;
 import com.atguigu.crowd.mapper.AdminMapper;
+import com.atguigu.crowd.mapper.RoleMapper;
 import com.atguigu.crowd.service.api.AdminService;
 
-// åœ¨ç±»ä¸Šæ ‡è®°å¿…è¦çš„æ³¨è§£ï¼ŒSpringæ•´åˆJunit
+// «ü©wSpring µ¹Junit ´£¨Ñªº¹B¦æ¾¹Ãş
 @RunWith(SpringJUnit4ClassRunner.class)
+// ¥[¸üSpring °t¸m¤å¥óªºµù¸Ñ
 @ContextConfiguration(locations = {"classpath:spring-persist-mybatis.xml", "classpath:spring-persist-tx.xml"})
 public class CrowdTest {
-	
+
 	@Autowired
 	private DataSource dataSource;
+
+	
 	
 	@Autowired
 	private AdminMapper adminMapper;
-	
 	@Autowired
 	private AdminService adminService;
 	
+
+	@Autowired
+	private RoleMapper roleMapper;
+	
+	@Test
+	public void testRoleSave() {
+		for(int i = 0; i < 235; i++) {
+			roleMapper.insert(new Role(null, "role"+i));
+		}
+	}
+	
+	@Test
+	public void test() {
+		for(int i = 0; i < 238; i++) {
+			adminMapper.insert(new Admin(null, "loginAcct"+i, "userPswd"+i, "userName"+i, "email"+i, null));
+		}
+	}
+	
+	
 	@Test
 	public void testTx() {
-		Admin admin = new Admin(null, "jerry", "123456", "æ°ç‘", "jerry@qq.com", null);
+		Admin admin = new Admin(null, "jerry", "123456", "³Ç·ç", "jerry@qq.com", null);
 		adminService.saveAdmin(admin);
 	}
+	
 	
 	@Test
 	public void testLog() {
 		
-		// 1.è·å–Loggerå¯¹è±¡ï¼Œè¿™é‡Œä¼ å…¥çš„Classå¯¹è±¡å°±æ˜¯å½“å‰æ‰“å°æ—¥å¿—çš„ç±»
-		Logger logger = LoggerFactory.getLogger(CrowdTest.class);
+		// 1.Àò¨úLogger¹ï¶H¡A³o¸Ì¶Ç¤JªºClass¹ï¶H´N¬O·í«e¥´¦L¤é»xªºÃş
+		Logger logger = LoggerFactory.getLogger(CrowdTest.class); //¨Ï¥Î¤èªk
 		
-		// 2.æ ¹æ®ä¸åŒæ—¥å¿—çº§åˆ«æ‰“å°æ—¥å¿—
+		// 2.®Ú¾Ú¤£¦P¤é»x¯Å§O¥´¦L¤é»x
 		logger.debug("Hello I am Debug level!!!");
 		logger.debug("Hello I am Debug level!!!");
 		logger.debug("Hello I am Debug level!!!");
@@ -60,23 +84,32 @@ public class CrowdTest {
 		logger.error("Error level!!!");
 		logger.error("Error level!!!");
 	}
+	
 	
 	@Test
 	public void testInsertAdmin() {
-		Admin admin = new Admin(null, "tom", "123123", "æ±¤å§†", "tom@qq.com", null);
-		int count = adminMapper.insert(admin);
+		Admin admin = new Admin(null, "tom", "123123", "´ö©i", "tom@qq.com", null);
+		int count = adminMapper.insert(admin);//·|ªğ¦^¨ü¼vÅTªº¦æ¼Æ
 		
-		// å¦‚æœåœ¨å®é™…å¼€å‘ä¸­ï¼Œæ‰€æœ‰æƒ³æŸ¥çœ‹æ•°å€¼çš„åœ°æ–¹éƒ½ä½¿ç”¨sysoutæ–¹å¼æ‰“å°ï¼Œä¼šç»™é¡¹ç›®ä¸Šçº¿è¿è¡Œå¸¦æ¥é—®é¢˜ï¼
-		// sysoutæœ¬è´¨ä¸Šæ˜¯ä¸€ä¸ªIOæ“ä½œï¼Œé€šå¸¸IOçš„æ“ä½œæ˜¯æ¯”è¾ƒæ¶ˆè€—æ€§èƒ½çš„ã€‚å¦‚æœé¡¹ç›®ä¸­sysoutå¾ˆå¤šï¼Œé‚£ä¹ˆå¯¹æ€§èƒ½çš„å½±å“å°±æ¯”è¾ƒå¤§äº†ã€‚
-		// å³ä½¿ä¸Šçº¿å‰ä¸“é—¨èŠ±æ—¶é—´åˆ é™¤ä»£ç ä¸­çš„sysoutï¼Œä¹Ÿå¾ˆå¯èƒ½æœ‰é—æ¼ï¼Œè€Œä¸”éå¸¸éº»çƒ¦ã€‚
-		// è€Œå¦‚æœä½¿ç”¨æ—¥å¿—ç³»ç»Ÿï¼Œé‚£ä¹ˆé€šè¿‡æ—¥å¿—çº§åˆ«å°±å¯ä»¥æ‰¹é‡çš„æ§åˆ¶ä¿¡æ¯çš„æ‰“å°ã€‚
-		System.out.println("å—å½±å“çš„è¡Œæ•°="+count);
+
+		adminMapper.insert(admin); //insertSelective()¦U­Ó¦r¬q¦³­Èªº¤~·|«O¦s¨ìinsert»y¥y·í¤¤
+
+		// ¦pªG¦b¹ê»Ú¶}µo¤¤¡A©Ò¦³·Q¬d¬İ¼Æ­Èªº¦a¤è³£¨Ï¥Îsysout¤è¦¡¥´¦L¡A·|µ¹¶µ¥Ø¤W½u¹B¦æ±a¨Ó°İÃD¡I
+		// sysout¥»½è¤W¬O¤@­ÓIO¾Ş§@¡A³q±`IOªº¾Ş§@¬O¤ñ¸û®ø¯Ó©Ê¯àªº¡C¦pªG¶µ¥Ø¤¤sysout«Ü¦h¡A¨º»ò¹ï©Ê¯àªº¼vÅT´N¤ñ¸û¤j¤F¡C
+		// §Y¨Ï¤W½u«e±Mªùªá®É¶¡§R°£¥N½X¤¤ªºsysout¡A¤]«Ü¥i¯à¦³¿òº|¡A¦Ó¥B«D±`³Â·Ğ¡C
+		// ¦Ó¦pªG¨Ï¥Î¤é»x¨t²Î¡A¨º»ò³q¹L¤é»x¯Å§O´N¥i¥H§å¶qªº±±¨î«H®§ªº¥´¦L¡C
+		System.out.println("¨ü¼vÅTªº¦æ¼Æ="+count);
 	}
 	
+	
+	
 	@Test
-	public void testConnection() throws SQLException {
+	public void testDataSource() throws SQLException {
+            // 1.³q¹L¼Æ¾Ú·½¹ï¶HÀò¨ú¼Æ¾Ú·½³s±µ
 		Connection connection = dataSource.getConnection();
+            // 2.¥´¦L¼Æ¾Ú®w³s±µ
 		System.out.println(connection);
-	}
 
+//		System.out.println("connection");
+	}
 }

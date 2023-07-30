@@ -1,0 +1,10 @@
+127.0.0.1 - - [15/Apr/2023:18:41:41 +0800] "GET / HTTP/1.1" 404 994
+0:0:0:0:0:0:0:1 - - [15/Apr/2023:18:41:42 +0800] "GET /atcrowdfunding02-admin-webui/index.jsp HTTP/1.1" 200 4126
+0:0:0:0:0:0:0:1 - - [15/Apr/2023:18:41:44 +0800] "GET /atcrowdfunding02-admin-webui/test/ssm.html HTTP/1.1" 200 1840
+0:0:0:0:0:0:0:1 - - [15/Apr/2023:18:41:44 +0800] "GET /atcrowdfunding02-admin-webui/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+0:0:0:0:0:0:0:1 - - [15/Apr/2023:18:41:44 +0800] "GET /atcrowdfunding02-admin-webui/css/font-awesome.min.css HTTP/1.1" 304 -
+0:0:0:0:0:0:0:1 - - [15/Apr/2023:18:41:44 +0800] "GET /atcrowdfunding02-admin-webui/css/login.css HTTP/1.1" 304 -
+0:0:0:0:0:0:0:1 - - [15/Apr/2023:18:41:44 +0800] "GET /atcrowdfunding02-admin-webui/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+0:0:0:0:0:0:0:1 - - [15/Apr/2023:18:41:44 +0800] "GET /atcrowdfunding02-admin-webui/bootstrap/fonts/glyphicons-halflings-regular.eot? HTTP/1.1" 304 -
+0:0:0:0:0:0:0:1 - - [15/Apr/2023:18:41:58 +0800] "POST /atcrowdfunding02-admin-webui/send/compose/object.json HTTP/1.1" 200 19
+0:0:0:0:0:0:0:1 - - [15/Apr/2023:18:42:01 +0800] "POST /atcrowdfunding02-admin-webui/send/array/three.html HTTP/1.1" 200 7

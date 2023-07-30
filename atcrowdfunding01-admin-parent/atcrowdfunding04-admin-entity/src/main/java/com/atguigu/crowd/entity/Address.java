@@ -1,5 +1,6 @@
 package com.atguigu.crowd.entity;
 
+
 public class Address {
 	
 	private String province;

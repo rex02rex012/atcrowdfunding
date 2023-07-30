@@ -9,84 +9,142 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.atguigu.crowd.constant.CrowdConstant;
+import com.atguigu.crowd.exception.AccessForbiddenException;
+import com.atguigu.crowd.exception.LoginAcctAlreadyInUseException;
+import com.atguigu.crowd.exception.LoginAcctAlreadyInUseForUpdateException;
+import com.atguigu.crowd.exception.LoginFailedException;
 import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.util.ResultEntity;
 import com.google.gson.Gson;
 
-// @ControllerAdviceè¡¨ç¤ºå½“å‰ç±»æ˜¯ä¸€ä¸ªåŸºäºæ³¨è§£çš„å¼‚å¸¸å¤„ç†å™¨ç±»
+// @ControllerAdviceªí¥Ü·í«eÃş¬O¤@­Ó°ò©óµù¸Ñªº²§±`³B²z¾¹Ãş
 @ControllerAdvice
 public class CrowdExceptionResolver {
+
 	
-	@ExceptionHandler(value = ArithmeticException.class)
-	public ModelAndView resolveMathException(
-				ArithmeticException exception,
-				HttpServletRequest request,
-				HttpServletResponse response
-			) throws IOException {
-
-		String viewName = "system-error";
-
-		return commonResolve(viewName, exception, request, response);
-	}
-	@ExceptionHandler(value = NullPointerException.class)
-	public ModelAndView resolveNullPointerException(
-			NullPointerException exception, 
+	@ExceptionHandler(value = LoginAcctAlreadyInUseForUpdateException.class)
+	public ModelAndView resolveLoginAcctAlreadyInUseForUpdateException(
+			LoginAcctAlreadyInUseForUpdateException exception,
 			HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+			HttpServletResponse response
+			) throws IOException {
 		
+		String viewName = "system-error";
+		
+		return commonResolve(viewName, exception, request, response);
+	}
+	
+	
+	@ExceptionHandler(value = LoginAcctAlreadyInUseException.class)
+	public ModelAndView resolveLoginAcctAlreadyInUseException(LoginAcctAlreadyInUseException exception,
+			HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		String viewName = "admin-add";
+
+		return commonResolve(viewName, exception, request, response);
+	}
+
+	@ExceptionHandler(value = AccessForbiddenException.class)
+	public ModelAndView resolveAccessForbiddenException(AccessForbiddenException exception, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		String viewName = "admin-login";
+		return commonResolve(viewName, exception, request, response);
+	}
+
+	@ExceptionHandler(value = LoginFailedException.class)
+	public ModelAndView resolveLoginFailedException(LoginFailedException exception, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		String viewName = "admin-login";
+		return commonResolve(viewName, exception, request, response);
+	}
+
+	// ªí¥Ü®·Àò¨ìException
+	@ExceptionHandler(value = ArithmeticException.class)
+	public ModelAndView resolveMathException(ArithmeticException exception, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+
 		String viewName = "system-error";
 
 		return commonResolve(viewName, exception, request, response);
 	}
 
-	
-	// @ExceptionHandlerå°†ä¸€ä¸ªå…·ä½“çš„å¼‚å¸¸ç±»å‹å’Œä¸€ä¸ªæ–¹æ³•å…³è”èµ·æ¥
-	private ModelAndView commonResolve(
-			
-			// å¼‚å¸¸å¤„ç†å®Œæˆåè¦å»çš„é¡µé¢
-			String viewName, 
-			
-			// å®é™…æ•è·åˆ°çš„å¼‚å¸¸ç±»å‹
-			Exception exception, 
-			
-			// å½“å‰è¯·æ±‚å¯¹è±¡
-			HttpServletRequest request, 
-			
-			// å½“å‰å“åº”å¯¹è±¡
+	// ªí¥Ü®·Àò¨ìException
+	@ExceptionHandler(value = NullPointerException.class)
+	public ModelAndView resolveNullPointerException(NullPointerException exception, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		
-		// 1.åˆ¤æ–­å½“å‰è¯·æ±‚ç±»å‹
+
+		String viewName = "system-error";
+
+		return commonResolve(viewName, exception, request, response);
+	}
+
+	// ªí¥Ü®·Àò¨ìException Ãş«¬ªº²§±`¹ï¶H¥Ñ·í«e¤èªk³B²z
+	@ExceptionHandler(value = Exception.class)
+	public ModelAndView resolveException(Exception exception, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		// ¥u¬O«ü©w·í«e²§±`¹ïÀ³ªº­¶­±§Y¥i
+		String viewName = "system-error";
+		return commonResolve(viewName, exception, request, response);
+	}
+
+	/**
+	 * ®Ö¤ß²§±`³B²z¤èªk
+	 * 
+	 * @param exception SpringMVC ®·Àò¨ìªº²§±`¹ï¶H
+	 * @param request   ¬°¤F§PÂ_·í«e½Ğ¨D¬O¡§´¶³q½Ğ¨D¡¨ÁÙ¬O¡§Ajax ½Ğ¨D¡¨ »İ­n¶Ç¤J­ì¥Írequest ¹ï¶H
+	 * @param response  ¬°¤F¯à°÷±NJSON ¦r¤¸¦ê§@¬°·í«e½Ğ¨DªºÅTÀ³¼Æ ¾Úªğ¦^µ¹ÂsÄı¾¹
+	 * @param viewName  «ü©w­n«e©¹ªºµø¹Ï¦WºÙ
+	 * @return ModelAndView
+	 * @throws IOException
+	 */
+	// @ExceptionHandler±N¤@­Ó¨ãÅéªº²§±`Ãş«¬©M¤@­Ó¤èªkÃöÁp°_¨Ó
+	private ModelAndView commonResolve(
+
+			// ²§±`³B²z§¹¦¨«á­n¥hªº­¶­±
+			String viewName,
+
+			// ¹ê»Ú®·Àò¨ìªº²§±`Ãş«¬
+			Exception exception,
+
+			// ·í«e½Ğ¨D¹ï¶H
+			HttpServletRequest request,
+
+			// ·í«eÅTÀ³¹ï¶H
+			HttpServletResponse response) throws IOException {
+
+		// 1.§PÂ_·í«e½Ğ¨DÃş«¬
 		boolean judgeResult = CrowdUtil.judgeRequestType(request);
-		
-		// 2.å¦‚æœæ˜¯Ajaxè¯·æ±‚
-		if(judgeResult) {
-			
-			// 3.åˆ›å»ºResultEntityå¯¹è±¡
+
+		// 2.¦pªG¬OAjax½Ğ¨D
+		if (judgeResult) {
+
+			// 3.³Ğ«ØResultEntity¹ï¶H
 			ResultEntity<Object> resultEntity = ResultEntity.failed(exception.getMessage());
-			
-			// 4.åˆ›å»ºGsonå¯¹è±¡
+
+			// 4.³Ğ«ØGson¹ï¶H
 			Gson gson = new Gson();
-			
-			// 5.å°†ResultEntityå¯¹è±¡è½¬æ¢ä¸ºJSONå­—ç¬¦ä¸²
+
+			// 5.±NResultEntity¹ï¶HÂà´«¬°JSON¦r¤¸¦ê
 			String json = gson.toJson(resultEntity);
-			
-			// 6.å°†JSONå­—ç¬¦ä¸²ä½œä¸ºå“åº”ä½“è¿”å›ç»™æµè§ˆå™¨
+
+			// 6.±NJSON¦r¤¸¦ê§@¬°ÅTÀ³Åéªğ¦^µ¹ÂsÄı¾¹
 			response.getWriter().write(json);
-			
-			// 7.ç”±äºä¸Šé¢å·²ç»é€šè¿‡åŸç”Ÿçš„responseå¯¹è±¡è¿”å›äº†å“åº”ï¼Œæ‰€ä»¥ä¸æä¾›ModelAndViewå¯¹è±¡
+
+			// 7.¥Ñ©ó¤W­±¤w¸g³q¹L­ì¥Íªºresponse¹ï¶Hªğ¦^¤FÅTÀ³¡A©Ò¥H¤£´£¨ÑModelAndView¹ï¶H
 			return null;
 		}
-		
-		// 8.å¦‚æœä¸æ˜¯Ajaxè¯·æ±‚åˆ™åˆ›å»ºModelAndViewå¯¹è±¡
+
+		// 8.¦pªG¤£¬OAjax½Ğ¨D«h³Ğ«ØModelAndView¹ï¶H
 		ModelAndView modelAndView = new ModelAndView();
-		
-		// 9.å°†Exceptionå¯¹è±¡å­˜å…¥æ¨¡å‹
-		modelAndView.addObject("exception", exception);
-		
-		// 10.è®¾ç½®å¯¹åº”çš„è§†å›¾åç§°
+
+		// 9.±NException¹ï¶H¦s¤J¼Ò«¬
+		modelAndView.addObject(CrowdConstant.ATTR_NAME_EXCEPTION, exception);
+
+		// 10.³]¸m¹ïÀ³ªºµø¹Ï¦WºÙ
 		modelAndView.setViewName(viewName);
-		
-		// 11.è¿”å›modelAndViewå¯¹è±¡
+
+		// 11.ªğ¦^modelAndView¹ï¶H
 		return modelAndView;
 	}
 

@@ -1,5 +1,6 @@
 package com.atguigu.crowd.entity;
 
+
 import java.util.List;
 
 public class ParamData {

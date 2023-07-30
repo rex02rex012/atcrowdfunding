@@ -1,0 +1,69 @@
+package com.atguigu.crowd.mvc.config;
+
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+// 註意！這個類一定要放在自動掃描的包下，否則所有配置都不會生效！
+
+// 將當前類標記為配置類
+@Configuration
+
+// 啟用Web環境下權限控制功能
+@EnableWebSecurity
+public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder builder) throws Exception {
+		//super.configure(auth); 一定要禁用默認規則
+		builder
+			.inMemoryAuthentication()	// 在內存中完成賬號、密碼的檢查
+			.withUser("tom")			// 指定賬號
+			.password("123123")			// 指定密碼
+			.roles("ADMIN")				// 指定當前用戶的角色
+			.and()
+			.withUser("jerry")			// 指定賬號
+			.password("123123")			// 指定密碼
+			.authorities("UPDATE")		// 指定當前用戶的權限
+			;
+		
+	}
+	
+	@Override
+	protected void configure(HttpSecurity security) throws Exception {
+		
+		security
+			.authorizeRequests()			// 對請求進行授權
+			.antMatchers("/index.jsp")		// 針對/index.jsp路徑進行授權
+			.permitAll()					// 可以無條件訪問
+			.antMatchers("/layui/**")		// 針對/layui目錄下所有資源進行授權
+			.permitAll()					// 可以無條件訪問
+			.and()
+			.authorizeRequests()			// 對請求進行授權
+			.anyRequest()					// 任意請求
+			.authenticated()				// 需要登錄以後才可以訪問
+			.and()
+			.formLogin()					// 使用表單形式登錄
+			
+			// 關於loginPage()方法的特殊說明
+			// 指定登錄頁的同時會影響到：“提交登錄表單的地址”、“退出登錄地址”、“登錄失敗地址”
+			// /index.jsp GET - the login form 去登錄頁面
+			// /index.jsp POST - process the credentials and if valid authenticate the user 提交登錄表單
+			// /index.jsp?error GET - redirect here for failed authentication attempts 登錄失敗
+			// /index.jsp?logout GET - redirect here after successfully logging out 退出登錄
+			.loginPage("/index.jsp")		// 指定登錄頁面（如果沒有指定會訪問SpringSecurity自帶的登錄頁）
+			
+			// loginProcessingUrl()方法指定了登錄地址，就會覆蓋loginPage()方法中設置的默認值/index.jsp POST
+			.loginProcessingUrl("/do/login.html")	// 指定提交登錄表單的地址
+			.usernameParameter("loginAcct")			// 定制登錄賬號的請求參數名
+			.passwordParameter("userPswd")			// 定制登錄密碼的請求參數名
+			.defaultSuccessUrl("/main.html")		// 登錄成功後前往的地址
+			;
+		
+	}
+
+}
+

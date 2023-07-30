@@ -1,0 +1,114 @@
+package com.atguigu.security.config;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+
+// 註意！這個類一定要放在自動掃描的包下，否則所有配置都不會生效！
+
+// 將當前類標記為配置類
+@Configuration
+
+// 啟用Web環境下權限控制功能
+@EnableWebSecurity
+public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
+	private DataSource dataSource;
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder builder) throws Exception {
+		
+		builder
+			.inMemoryAuthentication()	// 在內存中完成賬號、密碼的檢查
+			.withUser("tom")			// 指定賬號
+			.password("123123")			// 指定密碼
+			.roles("ADMIN","學徒")				// 指定當前用戶的角色
+			.and()
+			.withUser("jerry")			// 指定賬號
+			.password("123123")			// 指定密碼
+			.authorities("UPDATE","內門弟子")		// 指定當前用戶的權限
+			;
+		
+	}
+	
+	@Override
+	protected void configure(HttpSecurity security) throws Exception {
+		
+		JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+		tokenRepository.setDataSource(dataSource);
+		
+		tokenRepository.setCreateTableOnStartup(true);
+		
+		tokenRepository.initDao();
+		
+		security
+			.authorizeRequests()			// 對請求進行授權
+			.antMatchers("/index.jsp")		// 針對/index.jsp路徑進行授權
+			.permitAll()					// 可以無條件訪問
+			.antMatchers("/layui/**")		// 針對/layui目錄下所有資源進行授權
+			.permitAll()					// 可以無條件訪問
+			.antMatchers("/level1/**")		// 針對/level1/**路徑設置訪問要求
+			.hasRole("學徒")					// 要求用戶具備“學徒”角色才可以訪問
+			.antMatchers("/level2/**")		// 針對/level2/**路徑設置訪問要求
+			.hasAuthority("內門弟子")			// 要求用戶具備“內門弟子”權限才可以訪問
+			.and()
+			.authorizeRequests()			// 對請求進行授權
+			.anyRequest()					// 任意請求
+			.authenticated()				// 需要登錄以後才可以訪問
+			.and()
+			.formLogin()					// 使用表單形式登錄
+			
+			// 關於loginPage()方法的特殊說明
+			// 指定登錄頁的同時會影響到：“提交登錄表單的地址”、“退出登錄地址”、“登錄失敗地址”
+			// /index.jsp GET - the login form 去登錄頁面
+			// /index.jsp POST - process the credentials and if valid authenticate the user 提交登錄表單
+			// /index.jsp?error GET - redirect here for failed authentication attempts 登錄失敗
+			// /index.jsp?logout GET - redirect here after successfully logging out 退出登錄
+			.loginPage("/index.jsp")		// 指定登錄頁面（如果沒有指定會訪問SpringSecurity自帶的登錄頁）
+			
+			// loginProcessingUrl()方法指定了登錄地址，就會覆蓋loginPage()方法中設置的默認值/index.jsp POST
+			.loginProcessingUrl("/do/login.html")	// 指定提交登錄表單的地址
+			.usernameParameter("loginAcct")			// 定制登錄賬號的請求參數名
+			.passwordParameter("userPswd")			// 定制登錄密碼的請求參數名
+			.defaultSuccessUrl("/main.html")		// 登錄成功後前往的地址
+//			.and()
+//			.csrf()
+//			.disable()								// 禁用CSRF功能
+			.and()
+			.logout()								// 開啟退出功能
+			.logoutUrl("/do/logout.html")			// 指定處理退出請求的URL地址
+			.logoutSuccessUrl("/index.jsp")			// 退出成功後前往的地址
+			.and()
+			.exceptionHandling()					// 指定異常處理器
+			// .accessDeniedPage("/to/no/auth/page.html")	// 訪問被拒絕時前往的頁面
+			.accessDeniedHandler(new AccessDeniedHandler() {
+				
+				@Override
+				public void handle(HttpServletRequest request, HttpServletResponse response,
+						AccessDeniedException accessDeniedException) throws IOException, ServletException {
+					request.setAttribute("message", "抱歉！您無法訪問這個資源！☆☆☆");
+					request.getRequestDispatcher("/WEB-INF/views/no_auth.jsp").forward(request, response);
+				}
+			})
+			.and()
+			.rememberMe()			// 開啟記住我功能
+			.tokenRepository(tokenRepository)
+			;
+	}
+
+}

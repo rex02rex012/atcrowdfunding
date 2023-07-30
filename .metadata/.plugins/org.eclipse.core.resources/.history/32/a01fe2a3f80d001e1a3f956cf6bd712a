@@ -1,0 +1,31 @@
+package com.atguigu.crowd.mvc.handler;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.atguigu.crowd.service.api.AdminService;
+import com.atguigu.crowd.service.api.RoleService;
+
+@Controller
+public class AssignHandler {
+	
+	
+	@Autowired
+	private AdminService adminService;
+	
+	@Autowired
+	private RoleService roleService;
+	
+	
+	@RequestMapping("/assign/to/assign/role/page.html")
+	public String toAssignRolePage() {
+		
+		return null;
+	}
+	
+
+	
+	
+
+}
