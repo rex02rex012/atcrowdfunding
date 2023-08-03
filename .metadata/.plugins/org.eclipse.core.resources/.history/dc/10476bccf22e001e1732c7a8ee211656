@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+
+	<!-- 配置自動掃瞄的包：主要是為了把Service掃瞄到IOC容器中 -->
+	<context:component-scan base-package="com.atguigu.crowd.service"/>
+	
+	<!-- 配置事務管理器 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 裝配數據源 -->
+		<property name="dataSource" ref="dataSource"/>
+		
+	</bean>
+	
+	<!-- 配置事務切面 -->
+	<aop:config>
+		<!-- 考慮到後面我們整合SpringSecurity，避免把UserDetailsService加入事務控制，讓切入點表達式定位到ServiceImpl -->
+		<aop:pointcut expression="execution(* *..*ServiceImpl.*(..))" id="txPointcut"/>
+		
+		<!-- 將切入點表達式和事務通知關聯起來 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+	</aop:config>
+	
+	<!-- 配置事務通知 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+	
+		<!-- 配置事務屬性 -->
+		<tx:attributes>
+			
+			<!-- 查詢方法：配置只讀屬性(getXXX()、findXXX()..)，讓數據庫知道這是一個查詢操作，能夠進行一定優化 -->
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="find*" read-only="true"/>
+			<tx:method name="query*" read-only="true"/>
+			<tx:method name="count*" read-only="true"/>
+			
+			<!-- 增刪改方法：配置事務傳播行為、回滾異常 -->
+			<!-- 
+				propagation屬性：
+					REQUIRED：默認值，表示當前方法必須工作在事務中，如果當前線程上沒有已經開啟的事務，則自己開新事務。如果已經有了，那麼就使用這個已有的事務。
+						顧慮：用別人的事務有可能“被”回滾。
+					REQUIRES_NEW：建議使用的值，表示不管當前線程上有沒有事務，都要自己開事務，在自己的事務中運行。
+						好處：不會受到其他事務回滾的影響。
+			 -->
+			<!-- 
+				rollback-for屬性：配置事務方法針對什麼樣的異常回滾
+					默認：運行時異常回滾
+					建議：編譯時異常和運行時異常都回滾
+			 -->
+			<tx:method name="save*" propagation="REQUIRES_NEW" rollback-for="java.lang.Exception"/>
+			<tx:method name="update*" propagation="REQUIRES_NEW" rollback-for="java.lang.Exception"/>
+			<tx:method name="remove*" propagation="REQUIRES_NEW" rollback-for="java.lang.Exception"/>
+			<tx:method name="batch*" propagation="REQUIRES_NEW" rollback-for="java.lang.Exception"/>
+			
+		</tx:attributes>
+	
+	</tx:advice>
+
+
+</beans>
